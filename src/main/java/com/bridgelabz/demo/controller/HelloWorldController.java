@@ -19,6 +19,7 @@ import com.bridgelabz.demo.exception.ExceptionHandle;
 import com.bridgelabz.demo.model.HelloWorld;
 import com.bridgelabz.demo.response.Response;
 import com.bridgelabz.demo.service.IHelloWorldService;
+import com.bridgelabz.demo.util.TokenUtil;
 
 @RestController
 @RequestMapping("/helloworld")
@@ -26,6 +27,8 @@ public class HelloWorldController {
 	
 	@Autowired
 	IHelloWorldService service;
+	@Autowired
+	TokenUtil tokenutil;
 
 	
 	
@@ -65,13 +68,13 @@ public class HelloWorldController {
 	@PostMapping("/adduser")
 	public Response adddata(@RequestBody HelloWorldDTO helloworlddto) {
 		HelloWorld helloworld=service.adddata(helloworlddto);
-		return new Response("user added succesfully",(long) 200,helloworld);
+		return new Response("user added succesfully",(long) 200,tokenutil.createToken(helloworld.getId()));
 		
 	}
 	@GetMapping("/readdata")
-	public Response redadata() throws ExceptionHandle
+	public Response redadata(@RequestHeader(name="token") String token) throws ExceptionHandle
 	{
-		List<HelloWorld> helloworld=service.getalldata();
+		List<HelloWorld> helloworld=service.getalldata(token);
 		if(helloworld.size()>0) {
 			return new Response("all user fetched succesfully",(long) 200,helloworld);	
 		}

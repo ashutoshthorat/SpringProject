@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.demo.dto.HelloWorldDTO;
 import com.bridgelabz.demo.model.HelloWorld;
 import com.bridgelabz.demo.repository.IHelloWorldRepository;
+import com.bridgelabz.demo.util.TokenUtil;
 import com.fasterxml.jackson.databind.util.BeanUtil;
-
 @Service
 public class HelloWorldService implements IHelloWorldService {
 	
@@ -20,6 +20,9 @@ public class HelloWorldService implements IHelloWorldService {
 	
 	@Autowired
 	ModelMapper modelmapper;
+	
+	@Autowired
+	TokenUtil tokenutil;
 	
 	public String returnString() {
 		return "Hello World";
@@ -35,11 +38,11 @@ public class HelloWorldService implements IHelloWorldService {
 		return helloworld;
 	}
 
-	@Override
-	public List<HelloWorld> getalldata() {
-		List<HelloWorld> helloworldlist=helloworldrepository.findAll();
-		return helloworldlist;
-	}
+//	@Override
+//	public List<HelloWorld> getalldata() {
+//		List<HelloWorld> helloworldlist=helloworldrepository.findAll();
+//		return helloworldlist;
+//	}
 
 	@Override
 	public HelloWorld updatedata(Long id, HelloWorldDTO helloworlddto) {
@@ -62,6 +65,17 @@ public class HelloWorldService implements IHelloWorldService {
 		if(helloworld.isPresent()) {
 			helloworldrepository.delete(helloworld.get());
 			return helloworld.get();
+		}
+		return null;
+	}
+
+	@Override
+	public List<HelloWorld> getalldata(String token) {
+		Long id=tokenutil.decodeToken(token);
+		Optional<HelloWorld> helloworld=helloworldrepository.findById(id);
+		if(helloworld.isPresent()) {
+			List<HelloWorld> helloworldlist=helloworldrepository.findAll();
+			return helloworldlist;
 		}
 		return null;
 	}
