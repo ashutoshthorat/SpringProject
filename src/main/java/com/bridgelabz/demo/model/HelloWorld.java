@@ -1,5 +1,7 @@
 package com.bridgelabz.demo.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,12 +24,16 @@ public class HelloWorld {
 	private String firstName;
 	private String lastName;
 	private String address;
+	private LocalDateTime registerDate;
+	private LocalDateTime updatedDate;
 	
 
 	public HelloWorld(HelloWorldDTO helloworlddto) {
 		this.firstName=helloworlddto.getFirstName();
 		this.lastName=helloworlddto.getLastName();
 		this.address=helloworlddto.getAddress();
+		this.registerDate=LocalDateTime.now();
+		
 	}
 	public HelloWorld() {
 		

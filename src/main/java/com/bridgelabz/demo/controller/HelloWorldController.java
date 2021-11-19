@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.demo.dto.HelloWorldDTO;
 import com.bridgelabz.demo.exception.ExceptionHandle;
+import com.bridgelabz.demo.exception.RegisterException;
 import com.bridgelabz.demo.model.HelloWorld;
 import com.bridgelabz.demo.response.Response;
 import com.bridgelabz.demo.service.IHelloWorldService;
@@ -25,16 +26,38 @@ import com.bridgelabz.demo.util.TokenUtil;
 @RequestMapping("/helloworld")
 public class HelloWorldController {
 	
-	@Autowired
-	IHelloWorldService service;
-	@Autowired
-	TokenUtil tokenutil;
 
+	@Autowired
+	IHelloWorldService helloworldservice;
+	
+
+	
+	
+	@PostMapping("/adduser")
+	public Response adddata(@RequestBody HelloWorldDTO helloworlddto) {
+		HelloWorld helloworld=helloworldservice.createuser(helloworlddto);
+		return new Response("user added succesfully",(long) 200,helloworld);
+		
+	}
+	
+	@PutMapping("/updatedata/{id}")
+	public Response updatedata(@PathVariable Long id,@RequestBody HelloWorldDTO helloworlddto) throws RegisterException {
+
+		HelloWorld helloworld=helloworldservice.updateuser(id,helloworlddto);
+		return new Response("data updated succefully",(long) 200,helloworld);
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 	@GetMapping("/hello")
 	public String helloworld() {
-		return service.returnString();
+		return null;
+//		return service.returnString();
 		
 	}
 	@GetMapping("/param")
@@ -59,22 +82,17 @@ public class HelloWorldController {
 	@GetMapping("/parametersbybody")
 	public String helloworldbyrequestbody(@RequestBody HelloWorldDTO helloworlddto) {
 		System.out.println(helloworlddto.getFirstName());
-		return "Body Data->FirstName: "+helloworlddto.getFirstName()+" Last name: "+helloworlddto.getLastName()+" Address: "+
-		helloworlddto.getAddress();
+		return "Body Data->FirstName: "+helloworlddto.getFirstName()+" Last name: "+helloworlddto.getLastName();
 		
 	}
 	
 	
-	@PostMapping("/adduser")
-	public Response adddata(@RequestBody HelloWorldDTO helloworlddto) {
-		HelloWorld helloworld=service.adddata(helloworlddto);
-		return new Response("user added succesfully",(long) 200,tokenutil.createToken(helloworld.getId()));
-		
-	}
+	
 	@GetMapping("/readdata")
 	public Response redadata(@RequestHeader(name="token") String token) throws ExceptionHandle
 	{
-		List<HelloWorld> helloworld=service.getalldata(token);
+		List<HelloWorld>  helloworld = null;
+		//		List<HelloWorld> helloworld=service.getalldata(token);
 		if(helloworld.size()>0) {
 			return new Response("all user fetched succesfully",(long) 200,helloworld);	
 		}
@@ -84,16 +102,18 @@ public class HelloWorldController {
 		
 	}
 	
-	@PutMapping("/updatedata/{id}")
-	public HelloWorld updatedata(@PathVariable Long id,@RequestBody HelloWorldDTO helloworlddto) {
-		HelloWorld helloworld=service.updatedata(id,helloworlddto);
-		return helloworld;
-		
-	}
+//	@PutMapping("/updatedata/{id}")
+//	public HelloWorld updatedata(@PathVariable Long id,@RequestBody HelloWorldDTO helloworlddto) {
+//HelloWorld helloworld = null;
+//		//		HelloWorld helloworld=service.updatedata(id,helloworlddto);
+//		return helloworld;
+//		
+//	}
 	
 	@DeleteMapping("/deleteuser/{id}")
 	public HelloWorld deletedata(@PathVariable Long id) {
-		HelloWorld helloworld=service.deletedata(id);
+//		HelloWorld helloworld=service.deletedata(id);
+		HelloWorld helloworld = null;
 		return helloworld;
 		
 	}
