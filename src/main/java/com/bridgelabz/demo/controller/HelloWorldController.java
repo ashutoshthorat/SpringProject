@@ -30,20 +30,22 @@ public class HelloWorldController {
 	@Autowired
 	IHelloWorldService helloworldservice;
 	
-
+    @Autowired
+    TokenUtil tokenutil;
 	
 	
 	@PostMapping("/adduser")
 	public Response adddata(@RequestBody HelloWorldDTO helloworlddto) {
 		HelloWorld helloworld=helloworldservice.createuser(helloworlddto);
-		return new Response("user added succesfully",(long) 200,helloworld);
+		
+		return new Response("user added succesfully",(long) 200,tokenutil.createToken(helloworld.getId()));
 		
 	}
 	
-	@PutMapping("/updatedata/{id}")
-	public Response updatedata(@PathVariable Long id,@RequestBody HelloWorldDTO helloworlddto) throws RegisterException {
+	@PutMapping("/updatedata")
+	public Response updatedata(@RequestHeader String token,@RequestBody HelloWorldDTO helloworlddto) throws RegisterException {
 
-		HelloWorld helloworld=helloworldservice.updateuser(id,helloworlddto);
+		HelloWorld helloworld=helloworldservice.updateuser(token,helloworlddto);
 		return new Response("data updated succefully",(long) 200,helloworld);
 		
 	}

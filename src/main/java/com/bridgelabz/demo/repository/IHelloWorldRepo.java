@@ -10,8 +10,4 @@ import com.bridgelabz.demo.model.HelloWorld;
 
 public interface IHelloWorldRepo extends JpaRepository<HelloWorld,Long> {
 
-	@Query(value="select * from userdb.hello_world",nativeQuery=true)
-	public List<HelloWorld> getdata();
-
-	public Optional<HelloWorld> findByFirstName(String firstName);
 }

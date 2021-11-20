@@ -8,6 +8,7 @@ public interface IHelloWorldService {
 
 	HelloWorld createuser(HelloWorldDTO helloworlddto);
 
-	HelloWorld updateuser(Long id, HelloWorldDTO helloworlddto) throws RegisterException;
+
+	HelloWorld updateuser(String token, HelloWorldDTO helloworlddto) throws RegisterException;
 
 }
